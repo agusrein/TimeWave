@@ -1,0 +1,240 @@
+paths:
+  /api/products:
+    get:
+      summary: Se obtienen todos los productos de la base de datos.
+      tags:
+        - Productos
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: Número de página para la paginación.
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+          description: Límite de productos por página.
+        - in: query
+          name: category
+          required: false
+          schema:
+            type: string
+          description: Filtro por categoría de producto.
+        - in: query
+          name: sort
+          required: false
+          schema:
+            type: integer
+          description: Orden de los productos (ascendente o descendente).
+      responses:
+        '200':
+          description: Se obtuvieron todos los productos correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        '500':
+          description: Error interno del Servidor. No se pudieron obtener los productos.
+    post:
+      summary: Crea y agrega un nuevo producto a la base de datos. (Requiere permisos adicionales.)
+      tags: 
+      - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createProduct'
+      responses:
+        '200':
+          description: El producto se creó exitosamente.
+        '400': 
+          description: Datos incompletos o mal ingresados al crear el producto.
+        '500':
+          description: Error interno del servidor
+  /api/products/{pid}:
+    get:
+      summary: Se obtiene un producto buscado por su identificador.
+      tags:
+        - Productos
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200': 
+          description: Se encontró el producto en la base de datos.
+        '404':
+          description: El identificador proporcionado no existe.
+        '500':
+          description: Error interno del servidor.
+    put:
+      summary: Actualización de una propiedad del producto.
+      description: Permite a los usuarios con rol 'admin' o 'premium' actualizar un producto específico.
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto a actualizar.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                property:
+                  type: string
+                  description: Propiedad del producto que se desea actualizar.
+                value:
+                  type: string
+                  description: Nuevo valor para la propiedad especificada.
+              required:
+                - property
+                - value
+              example:
+                property: price
+                value: 10000
+      tags:
+        - Productos
+      responses:
+        '200': 
+          description: Producto actualizado.
+        '404':
+          description: No se encontró el producto solicitado.
+        '500':
+          description: Error interno del servidor.
+    delete:
+      summary: Eliminación de un producto.
+      description: Permite a los usuarios con rol 'admin' o 'premium' eliminar un producto específico. (IMPORTANTE - El usuario premium solo podrá eliminar su propio producto publicado.)
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto a eliminar.
+      tags:
+        - Productos
+      responses:
+        '200': 
+          description: Producto Eliminado.
+        '404':
+          description: No se encontró el producto solicitado.
+        '500':
+          description: Error interno del servidor.
+
+
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: ID autogestionado por MongoDB del producto.
+        title:
+          type: string
+          description: Título del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: array
+          items:
+            type: string
+          description: Conjunto de imágenes del producto.
+        code:
+          type: string
+          description: Código interno identificador del producto.
+        stock:
+          type: number
+          description: Cantidad disponible a la venta del producto.
+        status:
+          type: boolean
+          description: Estado del producto. Disponible / No disponible.
+        img:
+          type: string
+          description: Imagen de presentación del producto.
+        category:
+          type: string
+          description: Categoría asignada y perteneciente del producto.
+        owner:
+          type: string
+          description: ID autogestionado por MongoDB del Dueño / Gestionador del producto.
+      example:
+        _id: "ObjectId('asjhgA5658WDw')"
+        title: 'Hamburguesa Completa'
+        description: 'Medallón de carne 180gr, Lechuga, Tomate, Mayonesa de la Casa, Doble Queso y Jamón Cocido'
+        price: 12000
+        thumbnail: []
+        code: '011'
+        stock: 25
+        status: true
+        img: 'dashbhbajndjaw5568.jpg'
+        category: '03'
+        owner: "ObjectId('absj56688sda')"
+  requestBodies:
+    createProduct:
+      type: object
+      required:
+        - title
+        - description
+        - price
+        - code
+        - stock
+        - category
+      properties:
+        title:
+          type: string
+          description: Título del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: array
+          items:
+            type: string
+          description: Conjunto de imágenes del producto.
+        code:
+          type: string
+          description: Código interno identificador del producto.
+        stock:
+          type: number
+          description: Cantidad disponible a la venta del producto.
+        status:
+          type: boolean
+          description: Estado del producto. Disponible / No disponible.
+        img:
+          type: string
+          description: Imagen de presentación del producto.
+        category:
+          type: string
+          description: Categoría asignada y perteneciente del producto.
+      example:
+        title: 'Hamburguesa Completa'
+        description: 'Medallón de carne 180gr, Lechuga, Tomate, Mayonesa de la Casa, Doble Queso y Jamón Cocido'
+        price: 12000
+        thumbnail: []
+        code: '011'
+        stock: 25
+        status: true
+        img: 'dashbhbajndjaw5568.jpg'
+        category: '03'

@@ -1,0 +1,19 @@
+
+<h1 class="text-center mt-5">Chat Comunitario</h1>
+<p class="text-center mt-4">Bienvenido! {{user.name}}. Escribe tu mensaje: </p>
+<div class="mt-4 mb-3 d-flex justify-content-center">
+    <div class="col-6">
+        <input type="text" name="" id="chatBox" class="rounded-2 col-11">
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="col-6">
+        <p id="messagesLogs"></p>
+    </div>
+    
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/chat.js"></script>

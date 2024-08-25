@@ -1,0 +1,11 @@
+{{#if user}}
+<div class="d-flex w-100 justify-content-evenly mt-5">
+<div class="d-flex justify-content-center">
+    <h3 class="me-5 fs-4 align-self-center mb-0">Bienvenido</h3>
+    <p class="align-self-center mb-0">{{user.name}} {{user.last_name}}</p>
+</div>
+<button class="btn btn-warning col-1"><a href="/api/logout" class="text-decoration-none">Cerrar Sesión</a></button>
+</div>
+{{/if}}
+
+

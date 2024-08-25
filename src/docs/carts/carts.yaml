@@ -1,0 +1,272 @@
+paths:
+  /api/carts:
+    post:
+      summary: Crear un nuevo carrito de compras.
+      tags:
+        - Carrito
+      responses:
+        '200':
+          description: Carrito Creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Carrito creado exitosamente.
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error interno del Servidor.
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar un producto al carrito.
+      description: Este endpoint permite agregar un producto específico a un carrito determinado.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito al que se quiere agregar el producto.
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto que se quiere agregar al carrito.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Cantidad del producto a agregar al carrito.
+              required:
+                - quantity
+              example:
+                quantity: 2
+      responses:
+        '200': 
+          description: Producto agregado exitosamente.
+        '404':
+          description: No se encontró el ID del carrito o del producto ingresado.
+        '500':
+          description: Error interno del servidor.
+    delete:
+      summary: Eliminar un producto del carrito.
+      description: Este endpoint permite eliminar un producto específico de un carrito determinado.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito del que se quiere eliminar el producto.
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto que se quiere eliminar del carrito.
+      responses:
+        '200':
+          description: Producto Eliminado del carrito.
+        '404':
+          description: No se encontró el ID del carrito o del producto ingresado.
+        '500':
+          description: Error interno del servidor.
+    put:
+      summary: Actualizar la cantidad de un producto en el carrito.
+      description: Este endpoint permite actualizar la cantidad de un producto específico en un carrito determinado.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito donde se encuentra el producto.
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto cuya cantidad se desea actualizar.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Nueva cantidad para el producto en el carrito.
+              required:
+                - quantity
+              example:
+                quantity: 5
+      responses:
+        '200':
+          description: Se agregaron satisfactoriamente las unidades del producto especificado al carrito.
+        '404':
+          description: No se encontró el ID del carrito o del producto ingresado.
+        '500':
+          description: Error interno del servidor.
+  /api/carts/{cid}:
+    delete:
+      summary: Vaciar el carrito de compras.
+      description: Este endpoint permite vaciar completamente un carrito de compras, eliminando todos los productos que contiene.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito que se desea vaciar.
+      responses:
+        '200':
+          description: Se vació el carrito satisfactoriamente.
+        '404':
+          description: No se encontró el ID del carrito especificado.
+        '500':
+          description: Error interno del servidor.
+    put:
+      summary: Actualizar el carrito de compras.
+      description: Este endpoint permite actualizar el contenido completo de un carrito de compras con una nueva lista de productos.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito que se desea actualizar.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+                        description: ID del producto.
+                      quantity:
+                        type: integer
+                        description: Cantidad del producto.
+                  description: Lista de productos con sus respectivas cantidades.
+              required:
+                - products
+              example:
+                products:
+                  - productId: "60b6c43f1a4c2e3a4c4f9e44"
+                    quantity: 2
+                  - productId: "60b6c4401a4c2e3a4c4f9e45"
+                    quantity: 5
+      responses:
+        '200':
+          description: Carrito Actualizado.
+        '404':
+          description: No se encontró el ID del carrito especificado.
+        '500':
+          description: Error interno del servidor.
+    get:
+      summary: Obtener productos de un carrito.
+      description: Este endpoint permite obtener todos los productos que están dentro de un carrito específico.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito del cual se quieren obtener los productos.
+      responses:
+        '200':
+          description: Se obtuvieron los productos del carrito satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Productos obtenidos exitosamente.
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+        '404':
+          description: No se encontró el ID del carrito especificado.
+        '500':
+          description: Error interno del servidor.
+        
+  /api/carts/{cid}/purchase:
+    put:
+      summary: Confirmar la compra de los productos en el carrito.
+      description: Este endpoint permite confirmar la compra de todos los productos que están en un carrito específico.
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito del cual se quieren comprar los productos.
+      responses:
+        '200':
+          description: Compra finalizada satisfactoriamente.
+        '404':
+          description: No se encontró el ID del carrito especificado.
+        '500':
+          description: Error interno del servidor.
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                format: uuid
+                description: ID del producto (referencia al modelo de productos).
+              quantity:
+                type: integer
+                description: Cantidad del producto en el carrito.
+            required:
+              - product
+              - quantity
+      required:
+        - products
+      example:
+        products:
+          - product: "60b6c43f1a4c2e3a4c4f9e44"
+            quantity: 2
+          - product: "60b6c4401a4c2e3a4c4f9e45"
+            quantity: 5
+
+        
+      

@@ -1,0 +1,46 @@
+<h3 class="text-center mt-3 mb-3">Registrate</h3>
+<div class="d-flex justify-content-center w-100">
+    <div class="d-flex align-content-center flex-column col-4">
+        <form class="d-flex flex-column" action="/api/register" method="post">
+            <label class="mt-2  border-warning-subtle rounded-2" for="first_name">Nombre</label>
+            <div class="input-group mb-3 mt-1">
+                <input type="text" class="form-control border-warning-subtle" placeholder="Nombre" name="first_name"
+                    id="first_name" aria-describedby="basic-addon1" required>
+            </div>
+
+
+            <label class="mt-2  border-warning-subtle rounded-2" for="last_name">Apellido</label>
+            <div class="input-group mb-3 mt-1">
+                <input type="text" class="form-control border-warning-subtle" placeholder="Apellido" name="last_name"
+                    id="last_name" aria-describedby="basic-addon1" required>
+            </div>
+
+
+            <label class="mt-2  border-warning-subtle rounded-2" for="email">Email</label>
+            <div class="input-group mb-3 mt-1">
+                <input type="email" class="form-control border-warning-subtle" placeholder="Email" name="email"
+                    id="email" aria-describedby="basic-addon1" required>
+            </div>
+
+
+            <label class="mt-2  border-warning-subtle rounded-2" for="pass">Contraseña</label>
+            <div class="input-group mb-3 mt-1">
+                <input type="password" class="form-control border-warning-subtle" placeholder="Contraseña" name="pass"
+                    id="pass" aria-describedby="basic-addon1" required>
+            </div>
+
+
+            <label class="mt-2  border-warning-subtle rounded-2" for="age">Edad</label>
+            <div class="input-group mb-3 mt-1">
+                <input type="number" class="form-control border-warning-subtle" placeholder="Edad" name="age" id="age"
+                    aria-describedby="basic-addon1" required>
+            </div>
+
+            <button class="mt-3 btn btn-warning border-warning rounded-2" type="submit">Registrarse</button>
+
+        </form>
+        {{#if message}}
+        <p class="text-center mt-3 text-danger">{{message}}.</p>
+        {{/if}}
+    </div>
+</div>

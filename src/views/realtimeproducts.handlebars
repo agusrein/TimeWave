@@ -1,0 +1,22 @@
+<h3 class="text-center mt-3 mb-4">Agrega un Producto</h3>
+<div class="d-flex justify-content-center w-100">
+    <form action="" class="d-flex flex-column col-9 ">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="text" id="title" placeholder="Titulo">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="text" id="description" placeholder="Descripcion">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="number" id="price" placeholder="Precio">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="text" id="img" placeholder="Sin Imagen">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="text" id="code" placeholder="Codigo">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="number" id="stock" placeholder="Stock">
+        <input class="col-10 align-self-center mt-3 rounded-2" type="text" id="category" placeholder="Categoria">
+        <select class="col-10 align-self-center mt-3 rounded-2" name="" id="status">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+        </select>
+        <button class="col-10 align-self-center mt-3 rounded-2 btn btn-secondary" id="btn__AddProduct">Agregar</button>
+    </form>
+</div>
+<div id="div__container--products" class="d-flex justify-content-evenly flex-wrap mt-4">
+
+</div>
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="js/realTime.js"></script>
