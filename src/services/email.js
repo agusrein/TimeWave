@@ -31,7 +31,7 @@ class EmailManager {
     async sendEmailPasswordReset(email, first_name, token) {
         try {
             const mailOptions = {
-                from: "Coder Test <agusreinaldi10@gmail.com>",
+                from: `Coder Test <${EMAIL_USER}>`,
                 to: email,
                 subject: "Restablecimiento de Contraseña",
                 html: `
@@ -48,6 +48,26 @@ class EmailManager {
 
         } catch (error) {
             console.log('error al enviar el mail restablecimiento')
+        }
+    }
+
+    async sendDeleteEmailAccount(email, first_name) {
+        try {
+            const mailOptions = {
+                from: `Coder Test <${EMAIL_USER}>`,
+                to: email, 
+                subject: "Notificación de Eliminación de Cuenta", 
+                html: `
+                    <h3>Notificación de Eliminación de Cuenta</h3>
+                    <p>Estimado/a ${first_name},</p>
+                    <p>Tu cuenta ha sido eliminada debido a inactividad prolongada.</p>
+                    <p>Esperamos tu visita nuevamente!<a href="http://localhost:8080/login"></p>
+                    <p>Gracias por tu comprensión.</p>`
+            };
+            await this.transporter.sendMail(mailOptions);
+            console.log('Correo de eliminación enviado');
+        } catch (error) {
+            console.log('Error al enviar el correo de eliminación:', error);
         }
     }
 }

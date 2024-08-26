@@ -3,6 +3,7 @@ const emailManager = new EmailManager;
 const generateResetToken = require('../utils/resetTocken.js');
 const { createHash, isValidPassword } = require('../utils/hashbcrypt.js');
 const userModel = require('../models/user.model.js')
+const userDTO = require('../dto/user.dto.js');
 
 class UserRepository {
     async requestPasswordReset(email) {
@@ -96,6 +97,36 @@ class UserRepository {
                 return ({ status: true, message: 'Documentos cargados exitosamente' })
             }
             return ({ status: false, message: 'Usuario no encontrado' })
+
+        } catch (error) {
+            return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
+        }
+    }
+    async getUsers(){
+        try {
+            const users = await userModel.find();
+            if(users){
+                const usersDTO = users.map(user => new userDTO(user));
+                return ({ status: true, message: 'Usuarios obtenidos exitosamente', data: usersDTO })
+            }
+        } catch (error) {
+            return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
+        }
+    }
+
+    async deleteInactivity(){
+        try {
+                const timeOut = new Date(Date.now() - 30 * 60 * 1000); // Fecha/Hora 2d ántes de la actual
+                const usersToDelete = await userModel.find({last_connection: { $lt: timeOut }},{ email: 1,first_name:1, _id: 0 }); // Users mails con Fecha/Hora anterior a timeOut
+                if (usersToDelete.length > 0) {
+                    await userModel.deleteMany({
+                        last_connection: { $lt: timeOut }
+                    });
+                    for (const user of usersToDelete) {
+                        await emailManager.sendDeleteEmailAccount(user.email, user.first_name);
+                    }
+                }
+            return({status: true, message: 'Correo Enviado a usuarios eliminados:', data: usersToDelete})
 
         } catch (error) {
             return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })

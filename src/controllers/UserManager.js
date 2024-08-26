@@ -35,7 +35,6 @@ class UserManager {
                 httpOnly: true,
                 mxAge: 3600000
             })
-            // return res.status(200).json({token})
             return res.redirect("/products"); //CURRENT
         })(req, res, next);
     }
@@ -128,6 +127,32 @@ class UserManager {
         } catch (error) {
             return res.status(500).send({ message: error.message });
 
+        }
+    }
+
+    async getUsers(req,res){
+        try {
+            const result = await userServices.getUsers()
+            if (result.status) {
+                return res.status(200).send({ message: result.message, users: result.data })
+            }else {
+                return res.status(404).send({ message: result.message });
+            }
+        } catch (error) {
+            return res.status(500).send({ message: error.message });
+        }
+    }
+
+    async deleteInactivity(req,res){
+        try {
+            const result = await userServices.deleteInactivity()
+            if (result.status) {
+                return res.status(200).send({ message: result.message, data: result.data })
+            }else {
+                return res.status(404).send({ message: result.message });
+            }
+        } catch (error) {
+            return res.status(500).send({ message: error.message });
         }
     }
 }

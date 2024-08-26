@@ -13,8 +13,6 @@ const initializePassport = require('./config/passport.config.js');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error.js');
 const addLogger = require('./utils/logger.js');
-const swaggerJSdoc = require('swagger-jsdoc');
-const swaggerUiExpress = require('swagger-ui-express');
 require('./database.js')
 
 
@@ -56,21 +54,6 @@ const httpServer = app.listen(PUERTO, () => {
 //WEBSOCKET
 const SocketManager = require('./sockets/socketManager.js');
 new SocketManager(httpServer);
-
-
-//SWAGGER
-const swaggerOptions = {
-    definition:{
-        openapi: '3.0.1',
-        info:{
-            title: 'Documentación de la App Reggina Trattoria',
-            description: 'Aplicativo por el cual, se podrá realizar pedidos al restaurante Reggina Trattoria de lo que se encuentre en el menú del mismo. También se podrá visualizar tanto las órdenes de compra como los pagos gestionados por el usuario.'
-        }
-    },
-    apis: ['./src/docs/**/*.yaml']
-}
-const specs = swaggerJSdoc(swaggerOptions);
-app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 
 

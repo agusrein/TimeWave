@@ -1,5 +1,4 @@
 const { productServices } = require('../services/index.js')
-const createProducts = require('../utils/utils.js')
 
 class ProductManager {
 
@@ -108,18 +107,7 @@ class ProductManager {
         }
     }
 
-    async createProducts(request,response){
-        const products = [];
-        try {
-            for(let i=0; i<100;i++){
-                products.push(createProducts())
-            }
-            return response.status(200).send({message: 'Productos Creados', products})
-        } catch (error) {
-            response.status(500).send({ message:  error});
-        }
-        
-    }
+
 }
 
 

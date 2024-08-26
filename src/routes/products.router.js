@@ -5,7 +5,6 @@ const roleCheck = require('../middleware/checkrole.js');
 const jwtAuth = require('../middleware/jwtAuthenticate.js');
 
 const productManager = new ProductManager();
-router.get('/mockingproducts',jwtAuth, productManager.createProducts);
 
 router.get('/products', productManager.getProducts);
 
