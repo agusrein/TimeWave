@@ -61,13 +61,41 @@ class EmailManager {
                     <h3>Notificación de Eliminación de Cuenta</h3>
                     <p>Estimado/a ${first_name},</p>
                     <p>Tu cuenta ha sido eliminada debido a inactividad prolongada.</p>
-                    <p>Esperamos tu visita nuevamente!<a href="http://localhost:8080/login"></p>
-                    <p>Gracias por tu comprensión.</p>`
+                    <p>Gracias por tu comprensión.</p>
+                    <p>Esperamos tu visita nuevamente!<a href="http://localhost:8080/login">Nuestra App</a></p>`
             };
             await this.transporter.sendMail(mailOptions);
             console.log('Correo de eliminación enviado');
         } catch (error) {
-            console.log('Error al enviar el correo de eliminación:', error);
+            console.log('Error al enviar el correo de eliminación de cuenta:', error);
+        }
+    }
+
+    async sendDeleteProductInfo(email,product){
+        try {
+            const mailOptions = {
+                from: `Coder Test <${EMAIL_USER}>`,
+                to: email, 
+                subject: "Notificación de Eliminación de Producto", 
+                html: `
+                    <h3>Notificación de Eliminación de Producto</h3>
+                    <p>Estimado/a</p>
+                    <p>Queremos informarte que el siguiente producto ha sido eliminado:</p>
+                    <ul>
+                        <li><strong>Título:</strong> ${product.title}</li>
+                        <li><strong>Descripción:</strong> ${product.description}</li>
+                        <li><strong>Codigo:</strong> ${product.code}</li>
+                    </ul>
+                    <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.</p>
+                    <p>Gracias por tu comprensión.</p>
+                    <p>Esperamos tu visita nuevamente!</p>
+                    <a href="http://localhost:8080/login">Nuestra App</a>`
+            };
+            await this.transporter.sendMail(mailOptions);
+            console.log('Correo enviado');
+            
+        } catch (error) {
+            console.log('Error al enviar el correo de eliminación de producto:', error);
         }
     }
 }

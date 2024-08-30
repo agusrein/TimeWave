@@ -4,6 +4,8 @@ const ProductManager = require('../controllers/ProductManager');
 const productsManager = new ProductManager();
 const CartManager = require('../controllers/CartManager');
 const cartManager = new CartManager();
+const UserManager =require('../controllers/UserManager.js');
+const userManager = new UserManager();
 const jwtAuth = require('../middleware/jwtAuthenticate.js');
 const roleCheck = require('../middleware/checkrole.js');
 
@@ -51,7 +53,7 @@ router.get('/reset-password', (req,res)=>{
 router.get("/change-password", (req,res)=>{
     return res.render('changepassword');
 })
-
+router.get('/admin-users',jwtAuth, roleCheck('admin'), userManager.renderUsers)
 
 
 

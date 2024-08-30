@@ -64,7 +64,7 @@ class UserRepository {
                 const uploadedDocuments = user.documents.map(doc => doc.name.split('.')[0].trim().toLowerCase()); //Le saco el formato del documento al nombre del archivo subido y lo paso a minúscula.
                 const hasDocuments = requiredDocuments.every(doc => uploadedDocuments.includes(doc)); //Corroboro que los archivos requeridos estén dentro de los archivos subidos.
                 if (!hasDocuments) {
-                    return {status: false, message: 'Error. Debe adjuntar todos los documentos solicitados para poder cambiar de rol'};
+                    return { status: false, message: 'Error. Debe adjuntar todos los documentos solicitados para poder cambiar de rol', code: 1 };
                 }
             }
             const newRole = user.role === "user" ? "premium" : "user"
@@ -87,7 +87,7 @@ class UserRepository {
                     if (uploadedDocuments[type]) {
                         user.documents = user.documents.concat(
                             uploadedDocuments[type].map(doc => ({
-                                name: doc.originalname,
+                                name: doc.filename,
                                 reference: doc.path
                             }))
                         );
@@ -102,34 +102,62 @@ class UserRepository {
             return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
         }
     }
-    async getUsers(){
+    async getUsers() {
         try {
-            const users = await userModel.find();
-            if(users){
-                const usersDTO = users.map(user => new userDTO(user));
-                return ({ status: true, message: 'Usuarios obtenidos exitosamente', data: usersDTO })
+            const users = await userModel.find({}, { email: 1, first_name: 1, _id: 0, role: 1 });
+            if (users) {
+                return ({ status: true, message: 'Usuarios obtenidos exitosamente', data: users })
+            }
+            else {
+                return ({ status: false, message: 'No existen datos relevantes' })
             }
         } catch (error) {
             return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
         }
     }
 
-    async deleteInactivity(){
+    async deleteInactivity() {
         try {
-                const timeOut = new Date(Date.now() - 30 * 60 * 1000); // Fecha/Hora 2d ántes de la actual
-                const usersToDelete = await userModel.find({last_connection: { $lt: timeOut }},{ email: 1,first_name:1, _id: 0 }); // Users mails con Fecha/Hora anterior a timeOut
-                if (usersToDelete.length > 0) {
-                    await userModel.deleteMany({
-                        last_connection: { $lt: timeOut }
-                    });
-                    for (const user of usersToDelete) {
-                        await emailManager.sendDeleteEmailAccount(user.email, user.first_name);
-                    }
+            const timeOut = new Date(Date.now() - 48 * 3600 * 1000); // Fecha/Hora 2d ántes de la actual
+            const usersToDelete = await userModel.find({ last_connection: { $lt: timeOut }, role: { $ne: "admin" } }, { email: 1, first_name: 1, _id: 0 }); // Users mails con Fecha/Hora anterior a timeOut
+            if (usersToDelete.length > 0) {
+                await userModel.deleteMany({
+                    last_connection: { $lt: timeOut }, role: { $ne: "admin" }
+                });
+                for (const user of usersToDelete) {
+                    await emailManager.sendDeleteEmailAccount(user.email, user.first_name);
                 }
-            return({status: true, message: 'Correo Enviado a usuarios eliminados:', data: usersToDelete})
+            }
+            return ({ status: true, message: 'Correo Enviado a usuarios eliminados:', data: usersToDelete })
 
         } catch (error) {
             return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
+        }
+    }
+    async renderUsers() {
+        try {
+            const users = await userModel.find({ role: { $ne: "admin" } });
+            if (users.length > 0) {
+                const usersDTO = users.map(user => new userDTO(user));
+                return ({ status: true, message: 'Usuarios Encontrados', data: usersDTO })
+            }
+            return ({ status: false, message: 'No existen datos relevantes' })
+        } catch (error) {
+            return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
+        }
+    }
+
+    async deleteUser(uid) {
+        try {
+            const user = await userModel.findById(uid);
+            if (user) {
+                await userModel.findByIdAndDelete(uid);
+                return ({ status: true, message: 'Usuario Eliminado' })
+            }
+            return ({ status: false, message: 'No se encontró el usuario especificado' })
+        } catch (error) {
+            return ({ status: false, message: `LO SENTIMOS, HA OCURRIDO UN ERROR ${error}` })
+
         }
     }
 

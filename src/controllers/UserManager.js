@@ -117,44 +117,61 @@ class UserManager {
         const { uid } = req.params;
         const uploadedDocuments = req.files;
         try {
-            const result = await userServices.uploadFiles(uid,uploadedDocuments)
+            const result = await userServices.uploadFiles(uid, uploadedDocuments)
             if (result.status) {
-                return res.status(200).send({ message: result.message })
-            }
-            else {
-                return res.status(404).send({ message: result.message })
-            }
-        } catch (error) {
-            return res.status(500).send({ message: error.message });
+                const roleChangeResult = await userServices.changePremiumRol(uid);
+                if (roleChangeResult.status) {
+                    return res.status(200).send({ message: result.message, status: result.status })
+                }
+                else {
+                    return res.status(404).send({ message: result.message })
+                }
+            }} catch (error) {
+                return res.status(500).send({ message: error.message });
 
-        }
-    }
-
-    async getUsers(req,res){
-        try {
-            const result = await userServices.getUsers()
-            if (result.status) {
-                return res.status(200).send({ message: result.message, users: result.data })
-            }else {
-                return res.status(404).send({ message: result.message });
             }
-        } catch (error) {
-            return res.status(500).send({ message: error.message });
         }
-    }
 
-    async deleteInactivity(req,res){
-        try {
-            const result = await userServices.deleteInactivity()
-            if (result.status) {
-                return res.status(200).send({ message: result.message, data: result.data })
-            }else {
-                return res.status(404).send({ message: result.message });
+    async getUsers(req, res){
+            try {
+                const result = await userServices.getUsers()
+                if (result.status) {
+                    return res.status(200).send({ message: result.message, users: result.data })
+                } else {
+                    return res.status(204).send({ message: result.message });
+                }
+            } catch (error) {
+                return res.status(500).send({ message: error.message });
             }
-        } catch (error) {
-            return res.status(500).send({ message: error.message });
         }
+
+    async deleteInactivity(req, res){
+            try {
+                const result = await userServices.deleteInactivity()
+                if (result.status) {
+                    return res.status(200).send({ message: result.message, data: result.data })
+                } else {
+                    return res.status(404).send({ message: result.message });
+                }
+            } catch (error) {
+                return res.status(500).send({ message: error.message });
+            }
+        }
+
+    async renderUsers(req, res){
+            try {
+                const result = await userServices.renderUsers();
+                if (result.status) {
+                    return res.render('adminusers', { user: result.data })
+                } else {
+
+                    return res.render('adminusers', { message: result.message });
+                }
+            } catch (error) {
+                return res.status(500).send({ message: error.message });
+            }
+        }
+
     }
-}
 
 module.exports = UserManager;

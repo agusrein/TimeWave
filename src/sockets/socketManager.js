@@ -1,8 +1,6 @@
 const socket = require('socket.io');
-const MessageModel = require('../models/messages.model.js');
-// const productManager = require('../controllers/ProductManager.js');
-// const ProductManager = new productManager();
-const { productServices } = require('../services/index.js')
+// const MessageModel = require('../models/messages.model.js');
+const { productServices, userServices } = require('../services/index.js')
 
 class SocketManager { 
     constructor(httpServer) {
@@ -28,33 +26,44 @@ class SocketManager {
                 console.error('Error al obtener productos:', error);
             }
 
-            socket.on("deleteProduct", async (id) => {
-                await productServices.deleteProduct(id);
-                const products = await productServices.getProducts()
-                socket.emit("products", products.docs);
-            })
-            socket.on("addProduct", async (product) => {
-                const result = await productServices.addProduct(
-                    product.title,
-                    product.description,
-                    product.price,
-                    product.thumbnail,
-                    product.code,
-                    product.stock,
-                    product.status,
-                    product.img,
-                    product.category
-
-                );
-                if (result.status) {
-                    console.log(result);
-                    const products = await productServices.getProducts()
-                    socket.emit('products', products.docs );
-                } else {
-                    console.log(result);
-                    
+            socket.on("refreshProducts", async () => {
+                try {
+                    const products = await productServices.getProducts();
+                    socket.emit("products", products.docs);
+                } catch (error) {
+                    console.log('Error al obtener productos:', error);
                 }
             })
+            
+
+            socket.on('deleteUser', async (uid) => {
+                try {
+                    const result = await userServices.deleteUser(uid);
+                    if (result.status) {
+                        socket.emit('userDeleted', { status: 'success', message: result.message });
+                    } else {
+                        socket.emit('userDeleted', { status: 'error', message: result.message });
+                    }
+                } catch (error) {
+                    socket.emit('userDeleted', { status: 'error', message: result.message });
+                }
+            });
+
+            socket.on('changeRol', async (uid) => {
+                try {
+                    const result = await userServices.changePremiumRol(uid);
+                    if (result.status) {
+                        socket.emit('rolChanged', { status: 'success', message: result.message });
+                    } else if (result.code = 1) {
+                        socket.emit('rolChanged', { status: 'uploadDocuments', message: result.message });
+                    } else {
+                        socket.emit('rolChanged', { status: 'error', message: result.message });
+                    }
+                } catch (error) {
+                    socket.emit('rolChanged', { status: 'error', message: 'Error en el servidor' });
+                }
+            });
+            
         })
     }
 }

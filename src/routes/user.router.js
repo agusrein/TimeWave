@@ -14,6 +14,7 @@ router.post('/change-password',userManager.resetPassword)
 router.put("/premium/:uid", userManager.changePremiumRol)
 router.post('/:uid/documents',upload.fields([{ name: "documents" }, { name: "products" }, { name: "profiles" }]), userManager.uploadFiles)
 router.get('/users',jwtAuth,roleCheck('admin'), userManager.getUsers)
-router.delete('/users',userManager.deleteInactivity )
+router.delete('/users',jwtAuth,roleCheck('admin'),userManager.deleteInactivity )
+
 
 module.exports = router;

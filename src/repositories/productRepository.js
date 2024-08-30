@@ -3,6 +3,8 @@ const UserModel = require('../models/user.model.js');
 const customError = require('../services/errors/customErrors.js');
 const Errors = require('../services/errors/enum.js');
 const generateUndefinedTypeError = require('../services/errors/info.js');
+const EmailManager = require('../services/email.js');
+const emailManager = new EmailManager;
 
 class ProductRepository {
     async addProduct(user, title, description, price, thumbnail = [], code, stock, status = true, img = "", category, owner) {
@@ -104,12 +106,16 @@ class ProductRepository {
 
     async deleteProduct(user, id) {
         try {
+            const fullUser = await UserModel.findById(user._id)
             const productToDelete = await ProductModel.findById(id)
             if (!productToDelete) {
                 return { status: false, message: `Product Not Found : (${id})` }
             }
             if (user.role === 'admin' || (user.role === 'premium' && productToDelete.owner.toString() === user._id.toString())) {
                 await ProductModel.findByIdAndDelete(id);
+                if(user.role === 'premium'){
+                    await emailManager.sendDeleteProductInfo(fullUser.email,productToDelete);
+                }
                 return { status: true, message: `El producto ${id} se ha eliminado.` };
             }
             return { status: false, message: 'No tienes permisos para eliminar este producto.' };

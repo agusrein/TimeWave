@@ -32,30 +32,80 @@ const renderProducts = (products) => {
 
 }
 
-const deleteProduct = (id) => {
-    socket.emit("deleteProduct", id);
-}
+const deleteProduct = async (id) => {
+    try {
+        const response = await fetch(`/api/products/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-document.getElementById('btn__AddProduct').addEventListener('click', () => {
+        const result = await response.json();
+
+        if (response.ok) {
+            console.log( result.message);
+            socket.emit('refreshProducts'); 
+        } else {
+            console.error('Error al eliminar el producto:', result.message);
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert(`Error en la solicitud: ${error.message}`);
+    }
+};
+
+
+document.getElementById('btn__AddProduct').addEventListener('click', (e) => {
+    e.preventDefault();
     addProduct();
 })
 
-const getValue= (elementId) =>{
-    const value = document.getElementById(elementId).value;
-    return value === "" ? undefined : value;
-} 
 
-const addProduct = () => {
+const addProduct = async () => {
     const product = {
-        title: getValue('title'),
-        description: getValue('description'),
-        price: getValue('price'),
-        thumbnail: getValue('img'),
-        code: getValue('code'),
-        stock: getValue('stock'),
-        status: document.getElementById('status').value  === "true",
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        price: document.getElementById('price').value,
+        thumbnail: document.getElementById('img').value,
+        code: document.getElementById('code').value,
+        stock: document.getElementById('stock').value,
+        status: document.getElementById('status').value === "true",
         img: "",
-        category: getValue('category')
+        category: document.getElementById('category').value,
     };
-    socket.emit('addProduct', product);
+
+    const resetForm = () => {
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('img').value = '';
+        document.getElementById('code').value = '';
+        document.getElementById('stock').value = '';
+        document.getElementById('status').value = '';
+        document.getElementById('category').value = '';
+    }
+
+    try {
+        const response = await fetch('/api/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(product)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log(result.message);
+            socket.emit('refreshProducts');
+            resetForm();
+
+        } else {
+            console.log('Error al agregar producto:', result.message);
+        }
+    } catch (error) {
+        console.log('Error en la solicitud:', error);
+    }
 }
