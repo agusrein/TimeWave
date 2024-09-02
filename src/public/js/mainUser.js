@@ -1,6 +1,5 @@
 const socket = io();
 
-
 document.querySelectorAll('.user__table').forEach(table => {
     const userId = table.querySelector('.uid').textContent.trim();
     const first_name = table.querySelector('.first_name').textContent;

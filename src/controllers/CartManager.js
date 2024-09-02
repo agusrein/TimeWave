@@ -68,7 +68,7 @@ class CartManager {
     async updateQuantity(request, response) {
         const pid = request.params.pid;
         const cid = request.params.cid;
-        let quantity;
+        const quantity = parseInt(request.body.quantity);
         try {
             const updateQuantity = await cartServices.updateQuantity(cid, pid, quantity)
             updateQuantity.status ? response.status(200).send({ message: updateQuantity.message }) : response.status(404).send({ message: updateQuantity.message });
@@ -97,7 +97,7 @@ class CartManager {
                     product: e.product.toObject(),
                     quantity: e.quantity
                 }));
-                response.render('carts', { cart: products })
+                response.render('carts', { cart: products ,cartId: cart.cart._id})
             }
             else { response.status(404).send({ message: cart.message }); }
 

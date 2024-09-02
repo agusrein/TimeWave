@@ -84,13 +84,16 @@ class ProductManager {
             let query = request.query.category || null;
             let sort = parseInt(request.query.sort) || 1;
             const products = await productServices.getProducts({ page, limit, query, sort });
-    
-            const finalProducts = products.docs.map(e => {
-                const { _id, ...rest } = e.toObject();
-                return rest;
-            })
             
-            response.render('home', {
+            
+
+            const finalProducts = products.docs.map(e => {
+                const product = e.toObject();
+                return product;
+            })
+           
+
+            response.render('products', {
                 user: request.user,
                 products: finalProducts,
                 hasPrevPage: products.hasPrevPage,
@@ -102,6 +105,7 @@ class ProductManager {
                 prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
                 nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
             });
+            
         } catch (error) {
             response.status(500).send({ message: error.message });
         }
