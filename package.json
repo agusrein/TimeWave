@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/app.js --mode developer"
+    "dev": "nodemon src/app.js --mode developer",
+    "start": "node src/app.js"
   },
   "keywords": [],
   "author": "",
