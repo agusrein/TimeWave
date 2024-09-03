@@ -4,6 +4,7 @@ document.querySelectorAll('.user__table').forEach(table => {
     const userId = table.querySelector('.uid').textContent.trim();
     const first_name = table.querySelector('.first_name').textContent;
     const last_name = table.querySelector('.last_name').textContent;
+    
     table.querySelector('.btn__deleteUser').addEventListener('click', () => {
         socket.emit('deleteUser', userId);
 
@@ -62,9 +63,7 @@ document.querySelectorAll('.user__table').forEach(table => {
                 e.preventDefault();
                 try {
                     const formData = new FormData(e.target);
-
                     const response = await fetch(`/api/${userId}/documents`, {
-
                         method: 'POST',
                         body: formData,
                     })

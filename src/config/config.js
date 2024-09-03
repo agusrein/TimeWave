@@ -16,7 +16,8 @@ const configObject = {
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   LOGGER: process.env.LOGGER,
   EMAIL_USER: process.env.EMAIL_USER,
-  EMAIL_PASS: process.env.EMAIL_PASS
+  EMAIL_PASS: process.env.EMAIL_PASS,
+  BASE_URL: process.env.BASE_URL
 }
 
 

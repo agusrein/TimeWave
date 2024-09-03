@@ -40,7 +40,7 @@ class EmailManager {
                          <p>Hola ${first_name},</p>
                          <p>Recuerda que el código es válido por 24hs.</p>
                          <p style="font-size: 18px;">Tu código de restablecimiento: <strong>${token}</strong></p>
-                         <p><a href="http://localhost:8080/change-password" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Click Aquí para restablecer tu contraseña</a></p>
+                         <p><a href="https://timewave-production.up.railway.app/change-password" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Click Aquí para restablecer tu contraseña</a></p>
                         </div>
 `
             }
@@ -62,7 +62,7 @@ class EmailManager {
                     <p>Estimado/a ${first_name},</p>
                     <p>Tu cuenta ha sido eliminada debido a inactividad prolongada.</p>
                     <p>Gracias por tu comprensión.</p>
-                    <p>Esperamos tu visita nuevamente!<a href="http://localhost:8080/login">Nuestra App</a></p>`
+                    <p>Esperamos tu visita nuevamente!<a href="https://timewave-production.up.railway.app/login">Nuestra App</a></p>`
             };
             await this.transporter.sendMail(mailOptions);
             console.log('Correo de eliminación enviado');
@@ -89,7 +89,7 @@ class EmailManager {
                     <p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.</p>
                     <p>Gracias por tu comprensión.</p>
                     <p>Esperamos tu visita nuevamente!</p>
-                    <a href="http://localhost:8080/login">Nuestra App</a>`
+                    <a href="https://timewave-production.up.railway.app/login">Nuestra App</a>`
             };
             await this.transporter.sendMail(mailOptions);
             console.log('Correo enviado');

@@ -67,7 +67,7 @@ const initializePassport = () => {
     passport.use('github', new github({
         clientID: configObject.GITHUB_CLIENT_ID,
         clientSecret: configObject.GITHUB_CLIENT_SECRET,
-        callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
+        callbackURL: `${configObject.BASE_URL}/api/sessions/githubcallback`
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             const user = await userModel.findOne({ email: profile._json.email })

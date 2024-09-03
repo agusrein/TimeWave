@@ -6,7 +6,8 @@ const sessionsRouter = require('./routes/session.router.js');
 const loggerRouter = require('./routes/logger.router.js');
 const express = require('express');
 const app = express();
-const {PUERTO} = require('./config/config.js');
+const cors = require('cors');
+const {PUERTO, BASE_URL} = require('./config/config.js');
 const exphbs = require('express-handlebars');
 const passport = require('passport');
 const initializePassport = require('./config/passport.config.js');
@@ -16,7 +17,10 @@ const addLogger = require('./utils/logger.js');
 require('./database.js')
 
 
-
+app.use(cors({
+    origin: BASE_URL, 
+    credentials: true
+  }));
 
 
 //MIDDLEWARE
@@ -47,7 +51,7 @@ app.set("views", "./src/views");
 
 
 const httpServer = app.listen(PUERTO, () => {
-    console.log(`Escuchando puerto http//localhost:${PUERTO}`);
+    console.log(`${BASE_URL} Escuchando puerto :${PUERTO}`);
 })
 
 
