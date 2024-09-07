@@ -55,6 +55,8 @@ router.get("/change-password", (req,res)=>{
 })
 router.get('/admin-users',jwtAuth, roleCheck('admin'), userManager.renderUsers)
 
-
+router.get('/' , (req,res)=>{
+    return res.render('home')
+})
 
 module.exports = router;

@@ -1,46 +1,58 @@
-<h3 class="text-center mt-3 mb-3">Registrate</h3>
-<div class="d-flex justify-content-center w-100">
-    <div class="d-flex align-content-center flex-column col-4">
-        <form class="d-flex flex-column" action="/api/register" method="post">
-            <label class="mt-2  border-warning-subtle rounded-2" for="first_name">Nombre</label>
-            <div class="input-group mb-3 mt-1">
-                <input type="text" class="form-control border-warning-subtle" placeholder="Nombre" name="first_name"
-                    id="first_name" aria-describedby="basic-addon1" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Wave</title>
+</head>
+<body>
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+            <div class="row align-items-center g-lg-5 py-5">
+                <div class="col-lg-7 text-center text-lg-start">
+                    <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">¿Aun no tienes cuenta?</h1>
+                    <h5>Registrate para explorar la tienda.</h5>
+                    <p class="col-lg-10 lead">Ofrecemos un espacio exclusivo para gestionar todas tus compras y envíos.
+                        Contamos a su vez con un chat comunitario para que conozcas todas las experiencias de nuestros
+                        clientes.</p>
+                </div>
+                <div class="col-md-10 mx-auto col-lg-5">
+                    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" action="/api/register" method="post">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Nombre" name="first_name" id="first_name" required>
+                            <label for="first_name">Nombre</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="last_name" placeholder="Apellido" name="last_name" required>
+                            <label for="last_name">Apellido</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña" required>
+                            <label for="pass">Password</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="age" name="age" placeholder="Edad" required>
+                            <label for="age">Edad</label>
+                        </div>
+                        <div class="checkbox mb-3">
+                            <label>
+                                <input type="checkbox" value="remember-me"> Remember me
+                            </label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                        <hr class="my-4">
+                        {{#if message}}
+                        <p class="text-center mt-3 text-danger mb-2 fw-normal">{{message}}.</p>
+                        {{/if}}
+                        <small class="text-body-secondary">Al hacer clic en Registrarse, aceptas los términos y
+                            condiciones.</small>
+                    </form>
+                </div>
             </div>
-
-
-            <label class="mt-2  border-warning-subtle rounded-2" for="last_name">Apellido</label>
-            <div class="input-group mb-3 mt-1">
-                <input type="text" class="form-control border-warning-subtle" placeholder="Apellido" name="last_name"
-                    id="last_name" aria-describedby="basic-addon1" required>
-            </div>
-
-
-            <label class="mt-2  border-warning-subtle rounded-2" for="email">Email</label>
-            <div class="input-group mb-3 mt-1">
-                <input type="email" class="form-control border-warning-subtle" placeholder="Email" name="email"
-                    id="email" aria-describedby="basic-addon1" required>
-            </div>
-
-
-            <label class="mt-2  border-warning-subtle rounded-2" for="pass">Contraseña</label>
-            <div class="input-group mb-3 mt-1">
-                <input type="password" class="form-control border-warning-subtle" placeholder="Contraseña" name="pass"
-                    id="pass" aria-describedby="basic-addon1" required>
-            </div>
-
-
-            <label class="mt-2  border-warning-subtle rounded-2" for="age">Edad</label>
-            <div class="input-group mb-3 mt-1">
-                <input type="number" class="form-control border-warning-subtle" placeholder="Edad" name="age" id="age"
-                    aria-describedby="basic-addon1" required>
-            </div>
-
-            <button class="mt-3 btn btn-warning border-warning rounded-2" type="submit">Registrarse</button>
-
-        </form>
-        {{#if message}}
-        <p class="text-center mt-3 text-danger">{{message}}.</p>
-        {{/if}}
-    </div>
-</div>
+        </div>
+    
+</body>
+</html>

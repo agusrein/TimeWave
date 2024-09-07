@@ -18,7 +18,7 @@ class UserManager {
                 httpOnly: true,
                 mxAge: 3600000
             })
-            res.redirect('/products'); //CURRENT
+            res.redirect('/products'); 
         })(req, res, next);
     };
 
