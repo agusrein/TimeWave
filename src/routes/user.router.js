@@ -9,12 +9,18 @@ const roleCheck = require('../middleware/checkrole.js');
 
 
 router.post('/register', userManager.register)
+
 router.post('/reset-password', userManager.requestPasswordReset)
-router.post('/change-password',userManager.resetPassword)
-router.put("/premium/:uid", userManager.changePremiumRol)
-router.post('/:uid/documents',upload.fields([{ name: "documents" }, { name: "products" }, { name: "profiles" }]), userManager.uploadFiles)
-router.get('/users',jwtAuth,roleCheck('admin'), userManager.getUsers)
-router.delete('/users',jwtAuth,roleCheck('admin'),userManager.deleteInactivity )
+
+router.post('/change-password', userManager.resetPassword)
+
+router.put("/premium/:uid",jwtAuth, userManager.changePremiumRol)
+
+router.post('/:uid/documents',jwtAuth, upload.fields([{ name: "documents" }, { name: "products" }, { name: "profiles" }]), userManager.uploadFiles)
+
+router.get('/users', jwtAuth, roleCheck('admin'), userManager.getUsers)
+
+router.delete('/users', jwtAuth, roleCheck('admin'), userManager.deleteInactivity)
 
 
 module.exports = router;

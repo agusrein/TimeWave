@@ -9,6 +9,7 @@ const { COOKIETOKEN, JWTKEY } = require('../config/config.js');
 
 
 router.get('/logout', userManager.logout)
+
 router.post('/login', userManager.login)
 
 router.get('/github',passport.authenticate('github',{scope: ["user:email"]}),async (req,res)=>{})

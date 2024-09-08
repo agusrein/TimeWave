@@ -160,9 +160,10 @@ class UserManager {
 
     async renderUsers(req, res){
             try {
+                const user = req.user;
                 const result = await userServices.renderUsers();
                 if (result.status) {
-                    return res.render('adminusers', { user: result.data })
+                    return res.render('adminusers', { users: result.data, user: user})
                 } else {
 
                     return res.render('adminusers', { message: result.message });

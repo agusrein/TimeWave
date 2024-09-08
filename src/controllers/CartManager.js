@@ -91,13 +91,14 @@ class CartManager {
     async renderCart(request, response) {
         try {
             const cid = request.params.cid;
+            const user = request.user;
             const cart = await cartServices.getProductsByCart(cid);
             if (cart.status) {
                 const products = cart.cart.products.map(e => ({
                     product: e.product.toObject(),
                     quantity: e.quantity
                 }));
-                response.render('carts', { cart: products ,cartId: cart.cart._id})
+                response.render('carts', { cart: products ,cartId: cart.cart._id, user: user})
             }
             else { response.status(404).send({ message: cart.message }); }
 

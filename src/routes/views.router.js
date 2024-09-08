@@ -32,7 +32,7 @@ router.get("/chat",jwtAuth,roleCheck('user'), async (req, res) => {
     
 })
 
-router.get("/carts/:cid", cartManager.renderCart)
+router.get("/carts/:cid",jwtAuth, cartManager.renderCart)
 
 router.get("/login", (req,res) =>{
 res.render("login")
@@ -55,7 +55,7 @@ router.get("/change-password", (req,res)=>{
 })
 router.get('/admin-users',jwtAuth, roleCheck('admin'), userManager.renderUsers)
 
-router.get('/' , (req,res)=>{
+router.get('/', (req,res)=>{
     return res.render('home')
 })
 

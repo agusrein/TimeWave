@@ -14,6 +14,7 @@ const initializePassport = require('./config/passport.config.js');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error.js');
 const addLogger = require('./utils/logger.js');
+
 require('./database.js')
 
 
